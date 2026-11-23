@@ -3,7 +3,8 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { readFileSync } from 'node:fs';
 const { version } = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8'));
-const base = process.env.GITHUB_PAGES === 'true' ? '/Quick-Audio/' : '/';
+const base =
+  process.env.GITHUB_PAGES === 'true' ? process.env.GITHUB_PAGES_BASE || '/Quick-Audio/' : '/';
 export default defineConfig({
   define: { __APP_VERSION__: JSON.stringify(version) },
   // FFmpeg creates its own worker; Vite's dependency prebundle breaks its worker URL in dev.
@@ -12,7 +13,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'icons/icon-192.png', 'icons/icon-512.png'],
+      includeAssets: ['favicon.ico', 'favicon.svg', 'icons/icon-192.png', 'icons/icon-512.png'],
       manifest: {
         id: base,
         name: 'Quick Audio Tools',
