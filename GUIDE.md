@@ -1,6 +1,6 @@
 # Quick Audio Tools — Developer / Agent Guide
 
-> **Start here for every future modification.** This document maps features to source files, describes the architecture, enumerates known limitations, and gives deployment and verification steps. Last updated: 2026-11-22.
+> **Start here for every future modification.** This document maps features to source files, describes the architecture, enumerates known limitations, and gives deployment and verification steps. Last updated: 2026-11-24.
 
 ## 1. Product contract
 
@@ -24,7 +24,9 @@ npm run preview
 
 The `postinstall` script copies `ffmpeg-core.js` and `ffmpeg-core.wasm` from `node_modules/@ffmpeg/core/dist/esm/` to `public/ffmpeg/`. These are self-hosted at **the same origin**, so no CDN and no remote conversion service are required. Assets in `public/ffmpeg` are generated and deliberately excluded from source archive and git. **Do not remove `postinstall`** or conversion will fail at runtime. If package installation uses `--ignore-scripts`, run `node scripts/copy-ffmpeg.mjs` manually.
 
-Build output is `dist/`. For **Cloudflare Pages**, choose Framework: Vite, Build command: `npm run build`, Build output directory: `dist`, Node 22 recommended. The `public/_headers` file sets security headers and the `.wasm` MIME type. The `public/_redirects` file provides SPA fallback (static files such as `/privacy.html` take precedence). Deploy static `dist` assets only. No worker function, API key, database, or secrets are needed.
+Build output is `dist/`. For **GitHub Pages**, set repository **Settings → Pages → Build and deployment → Source** to **GitHub Actions**. The workflow in `.github/workflows/deploy-pages.yml` installs packages with Node 22, runs checks, builds with `GITHUB_PAGES=true`, and publishes `dist/` under `/Quick-Audio/`. The expected URL is https://farahzadieng.github.io/Quick-Audio/. The `GITHUB_PAGES` flag adjusts Vite's base path, PWA manifest and service-worker fallback, SEO asset references, privacy links, and FFmpeg asset URLs. For another root-hosted site, run `npm run build` without the flag.
+
+Cloudflare Pages and Workers currently limit each static asset to 25 MiB, while the copied FFmpeg WebAssembly file is about 31 MiB. GitHub Actions cannot bypass a destination host's asset limit. GitHub Pages accepts this app's total site size. The Cloudflare-specific `public/_headers` and `public/_redirects` files are ignored by GitHub Pages; its security headers cannot be set using those files. No worker function, API key, database, or secrets are needed for GitHub Pages.
 
 The repository includes `package-lock.json`. Use `npm ci` in CI for reproducible installation, and run the verification commands below before deployment. The build and browser checks performed on 2026-11-23 are summarized in section 11; additional conversion formats and mobile browser behavior still need validation.
 

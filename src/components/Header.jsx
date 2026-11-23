@@ -11,7 +11,7 @@ export default function Header({ tab, setTab, theme, setTheme }) {
           }}
           aria-label="Quick Audio Tools home"
         >
-          <img src="/icons/icon-192.png" alt="" />
+          <img src={`${import.meta.env.BASE_URL}icons/icon-192.png`} alt="" />
           <span>
             Quick <span className="brand-muted">Audio Tools</span>
           </span>

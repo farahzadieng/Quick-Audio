@@ -750,7 +750,7 @@ export default function App() {
             <a href="#top">Back to top</a>
             <a href="#how-it-works">How it works</a>
             <a href="#faq">FAQs</a>
-            <a href="/privacy.html">Privacy</a>
+            <a href={`${import.meta.env.BASE_URL}privacy.html`}>Privacy</a>
           </div>
           <small>
             © {new Date().getFullYear()} Quick Audio Tools. Made for your browser. · v
