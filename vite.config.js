@@ -5,6 +5,8 @@ import { readFileSync } from 'node:fs';
 const { version } = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8'));
 export default defineConfig({
   define: { __APP_VERSION__: JSON.stringify(version) },
+  // FFmpeg creates its own worker; Vite's dependency prebundle breaks its worker URL in dev.
+  optimizeDeps: { exclude: ['@ffmpeg/ffmpeg'] },
   plugins: [
     react(),
     VitePWA({

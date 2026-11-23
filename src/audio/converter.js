@@ -1,3 +1,5 @@
+import { toBlobURL } from '@ffmpeg/util';
+
 let engine;
 let loading;
 export const OUTPUT_FORMATS = [
@@ -19,14 +21,15 @@ export async function loadEngine(onProgress = () => {}) {
       try {
         await ff.load(
           {
-            coreURL: `${base}/ffmpeg-core.js`,
-            wasmURL: `${base}/ffmpeg-core.wasm`,
+            // Vite does not allow module imports from public/ in dev; blob URLs bypass that transform.
+            coreURL: await toBlobURL(`${base}/ffmpeg-core.js`, 'text/javascript'),
+            wasmURL: await toBlobURL(`${base}/ffmpeg-core.wasm`, 'application/wasm'),
           },
           { signal: AbortSignal.timeout(120_000) },
         );
       } catch (error) {
         ff.terminate();
-        if (error.name === 'TimeoutError') {
+        if (error.name === 'AbortError' || error.name === 'TimeoutError') {
           throw Error(
             'The conversion engine could not start on this browser. Please retry or use a different browser.',
           );
