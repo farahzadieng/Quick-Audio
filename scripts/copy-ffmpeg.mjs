@@ -1,6 +1,6 @@
 import { mkdir, copyFile, access } from 'node:fs/promises';
 import { resolve } from 'node:path';
-const source = resolve('node_modules/@ffmpeg/core/dist/umd');
+const source = resolve('node_modules/@ffmpeg/core/dist/esm');
 const destination = resolve('public/ffmpeg');
 try {
   await mkdir(destination, { recursive: true });

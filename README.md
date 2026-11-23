@@ -1,4 +1,4 @@
-# Audio Quick Tools
+# Quick Audio Tools
 
 Free privacy-first client-side audio tag editor + audio format converter. Designed for Cloudflare Pages and installable as a PWA.
 
